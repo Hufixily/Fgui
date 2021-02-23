@@ -1,0 +1,25 @@
+$classRequire
+---@class $className
+local $className = class("$className");
+
+function $className:OnCreate(gComponent)
+    if IsNull(gComponent) then
+        return
+    end
+    self.gComponent = gComponent;
+$classField
+end
+
+function IsNull(unity_object)
+    if unity_object == nil then
+        return true
+    end
+
+    if type(unity_object) == "userdata" and unity_object.IsNull ~= nil then
+        return unity_object:IsNull()
+    end
+
+    return false
+end
+
+return $className;

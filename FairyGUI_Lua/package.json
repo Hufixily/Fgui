@@ -1,0 +1,11 @@
+{
+  "name": "com.hufixily",
+  "displayName": "Editor2Lua",
+  "description": "试作机1号",
+  "version": "0.1",
+  "author": {
+    "name": "hufixily"
+  },
+  "icon": "icon.jpg",
+  "main": "main.lua"
+}
