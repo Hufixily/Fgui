@@ -86,7 +86,7 @@ local function GetGType(type)
     elseif type == "GTree" then
         return ".asTree";
     else
-        return nil;
+        return type;
     end
 end
 
@@ -122,6 +122,7 @@ end
 local function WriteFieldInfo(classInfo, templateStr)
     local str = "";
     --class
+    str = str .. "\t--Class Info\n";
     for i = 0, classInfo.members.Count - 1 do
         local info = classInfo.members[i];
         local type = info.type;
@@ -131,17 +132,40 @@ local function WriteFieldInfo(classInfo, templateStr)
         end
     end
 
-    str = str.."\n";
+    str = str .. "\t--Pkg Info\n";
+    --跨包
+    for i = 0, classInfo.members.Count - 1 do
+        local info = classInfo.members[i];
+        local type = exportedTypeInfo[info.name];
+        if not exportedClassInfo[type] then
+            local typeStr = GetGType(type);
+            if pkgInfo[info.name] then
+                str = str .. "\t";
+                str = str .. string.format(
+                        "UIPackage.CreateObjectAsync(\"%s\",\"%s\",function(gObj) self.%s =  gObj%s; end)",
+                        pkgInfo[info.name], info.name, info.varName, typeStr);
+
+                str = str .. "\n";
+            end
+        end
+    end
+
+    str = str .. "\t--member Info\n";
     --field
     for i = 0, classInfo.members.Count - 1 do
         local info = classInfo.members[i];
         local type = exportedTypeInfo[info.name];
         if not exportedClassInfo[type] then
             local typeStr = GetGType(type);
-            if type ~= "Controller" then
-                str = str .. string.format('\tself.%s = gComponent:GetChild("%s")%s;\n', info.varName, info.name, typeStr);
+            if pkgInfo[info.name] then
+            elseif type ~= "Controller" then
+                str = str .. "\t";
+                str = str .. string.format('self.%s = gComponent:GetChild("%s")%s;', info.varName, info.name, typeStr);
+                str = str .. "\n";
             else
-                str = str .. string.format('\tself.%s = gComponent:GetController("%s");\n', info.varName, info.name);
+                str = str .. "\t";
+                str = str .. string.format('self.%s = gComponent:GetController("%s");', info.varName, info.name);
+                str = str .. "\n";
             end
         end
     end

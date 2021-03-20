@@ -1,6 +1,6 @@
-package.cpath = package.cpath .. ';C:/Users/admin/AppData/Roaming/JetBrains/IdeaIC2020.3/plugins/intellij-emmylua/classes/debugger/emmy/windows/x64/?.dll'
-local dbg = require('emmy_core')
-dbg.tcpConnect('localhost', 9966)
+--package.cpath = package.cpath .. ';C:/Users/admin/AppData/Roaming/JetBrains/IdeaIC2020.3/plugins/intellij-emmylua/classes/debugger/emmy/windows/x64/?.dll'
+--local dbg = require('emmy_core')
+--dbg.tcpConnect('localhost', 9966)
 
 local App = CS.FairyEditor.App
 local _pluginPath = PluginPath;
