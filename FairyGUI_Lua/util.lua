@@ -1,35 +1,37 @@
 local util = {};
 
-local function print_table ( t )
-    local print_r_cache={}
-    local function sub_print_r(t,indent)
+local function print_table (t)
+    local print_r_cache = {}
+    local function sub_print_r(t, indent)
+        local str = "";
         if (print_r_cache[tostring(t)]) then
-            fprint(indent.."*"..tostring(t))
+            str = str + indent .. "*" .. tostring(t) .. "\n";
         else
-            print_r_cache[tostring(t)]=true
-            if (type(t)=="table") then
-                for pos,val in pairs(t) do
-                    if (type(val)=="table") then
-                        fprint(indent.."["..pos.."] => "..tostring(t).." {")
-                        sub_print_r(val,indent..string.rep(" ",string.len(pos)+8))
-                        fprint(indent..string.rep(" ",string.len(pos)+6).."}")
-                    elseif (type(val)=="string") then
-                        fprint(indent.."["..pos..'] => "'..val..'"')
+            print_r_cache[tostring(t)] = true
+            if (type(t) == "table") then
+                for pos, val in pairs(t) do
+                    if (type(val) == "table") then
+                        str = str + indent .. "[" .. pos .. "] => " .. tostring(t) .. " {\n"
+                        sub_print_r(val, indent .. string.rep(" ", string.len(pos) + 8))
+                        str = str + indent .. string.rep(" ", string.len(pos) + 6) .. "} \n";
+                    elseif (type(val) == "string") then
+                        str = str + indent .. "[" .. pos .. '] => "' .. val .. '"\n';
                     else
-                        fprint(indent.."["..pos.."] => "..tostring(val))
+                        str = str + indent .. "[" .. pos .. "] => " .. tostring(val) .."\n";
                     end
                 end
             else
-                fprint(indent..tostring(t))
+                str = str + indent .. tostring(t) .."\n";
             end
         end
+        fprint(str);
     end
-    if (type(t)=="table") then
-        fprint(tostring(t).." {")
-        sub_print_r(t,"  ")
+    if (type(t) == "table") then
+        fprint(tostring(t) .. " {")
+        sub_print_r(t, "  ")
         fprint("}")
     else
-        sub_print_r(t,"  ")
+        sub_print_r(t, "  ")
     end
     fprint()
 end
